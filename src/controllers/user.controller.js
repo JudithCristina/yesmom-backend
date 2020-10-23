@@ -25,8 +25,6 @@ export const getUsers = async (username,password) => {
 
 export const createUser = async (req, res) => {
     let dataEncrypted = {};
-    console.log(req.body.username);
-    console.log(req.body.password);
 
     if(req.body.username === undefined 
         || req.body.password === undefined
