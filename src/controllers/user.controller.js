@@ -2,6 +2,8 @@ import User from '../models/user.model';
 import * as Aut from '../controllers/autentication.controller';
 import config from '../config';
 import * as DomainConstant from '../constant/domain/domain';
+import * as ErrConst from '../constant/errors/codes';
+import * as ErrResponse from '../util/errors/errorResponse';
 
 export const getUsers = async (username,password) => {
     
@@ -23,7 +25,16 @@ export const getUsers = async (username,password) => {
 
 export const createUser = async (req, res) => {
     let dataEncrypted = {};
-    
+    console.log(req.body.username);
+    console.log(req.body.password);
+
+    if(req.body.username === undefined 
+        || req.body.password === undefined
+        || !req.body.username
+        || !req.body.password){
+        return res.json(ErrResponse.NewErrorResponse(ErrConst.codReqInvalido));
+    }
+
     // user
     var userEncrypted =  await Aut.encrypt(req.body.username, config.SECURITY_KEY);
     userEncrypted = userEncrypted.toString();
