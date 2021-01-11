@@ -66,6 +66,9 @@ exports.NewErrorResponse = function (code) {
         case "30":
             error.MensajeRespuesta = "ERROR AL EXPORTAR ARCHIVO";
             break
+        case "31":
+            error.MensajeRespuesta = "USUARIO YA EXISTE";
+            break;
         default:
             error.MensajeRespuesta = "ERROR DESCONOCIDO";
     }
