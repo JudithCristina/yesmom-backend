@@ -57,3 +57,30 @@ export const decrypt = async(data,key)=>{
     }
     return result;
 }
+
+export const validateToken = async(req, res, next)=>{
+    const token = req.headers['access-token'];
+    const app = express();
+    app.set('appKey', config.APP_KEY);
+    
+    if (token) {
+        jwt.verify(token, app.get('appKey'), (err, decoded) => {      
+          if (err) {
+              console.log('[err]', err);
+            return res.json({ mensaje: 'Token inválida' });    
+          } else {
+            req.decoded = decoded;    
+            //next();
+            console.log('*******req.decoded', req.decoded);
+            res.json({
+                mensaje: DomainConstant.TOKEN_VALIDO,
+                token: token
+            });
+          }
+        });
+      } else {
+        res.send({ 
+            mensaje: 'Token no proveída.' 
+        });
+      }
+}

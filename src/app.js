@@ -9,7 +9,7 @@ import userRoutes from './routes/user.routes';
 const app = express();
 
 // Settings
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 4200);
 
 // Middlewares
 app.use(cors());
