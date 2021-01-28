@@ -25,5 +25,6 @@ module.exports = {
     "codReqInvalido":"11",
     "codServNoDisponible":"28",
     "codTipoDocumentoNoValido":"29",
-    "codExportarArchivo":"30"
+    "codExportarArchivo":"30",
+    "codUsuarioExiste": "31",
 }

@@ -42,6 +42,11 @@ export const createUser = async (req, res) => {
     dataEncrypted.username = userEncrypted;
     dataEncrypted.password = pwdEncrypted;
     
+    // VALIDAR QUE NO SE INGRESEN USUARIOS REPETIDOS
+    const users = await User.find({username: userEncrypted});
+    if(users.length > 0){
+        return res.json(ErrResponse.NewErrorResponse(ErrConst.codUsuarioExiste));
+    }
     const newUser = new User(dataEncrypted);
    
     const user = await newUser.save();
@@ -49,3 +54,41 @@ export const createUser = async (req, res) => {
         user
     });
 };
+
+export const getUsersAll = async (req, res)=>{
+    const encryptedUser = await Aut.encrypt(req.body.username, config.SECURITY_KEY);
+    const encryptedPwd = await Aut.encrypt(req.body.password, config.SECURITY_KEY);
+
+    const users = await User.find({username: encryptedUser, password: encryptedPwd});
+    let result={};
+   
+    if (users.length === 0){
+        result.valid = false;
+        result.response = DomainConstant.ERROR_INTERNO;
+        return res.json(result);
+    }
+    result.valid = true;
+    result.response = users;
+    return res.json(result);
+};
+
+export const getUsersDecrypt = async(req, res)=>{
+    const decryptUser = await Aut.decrypt(req.body.username, config.SECURITY_KEY);
+    const decryptPwd = await Aut.decrypt(req.body.password,config.SECURITY_KEY);
+
+    let result = {};
+
+    if(!decryptUser && !decryptPwd){
+        result.valid = false;
+        result.response = DomainConstant.ERROR_INTERNO;
+        return res.json(result);
+        
+    }
+    let user = {};
+    user.username = decryptUser;
+    user.password = decryptPwd;
+    result.valid = true;
+    result.response = user;
+    return res.json(result);
+
+}
