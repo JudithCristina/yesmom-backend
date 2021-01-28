@@ -1,5 +1,5 @@
 import { config } from 'dotenv';
-config();
+config({path:".env"});
 
 module.exports = {
     MONGODB_URI: process.env.MONGODB_URI || '',
